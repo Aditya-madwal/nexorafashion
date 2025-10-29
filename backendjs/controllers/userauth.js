@@ -51,12 +51,6 @@ const register = async (req, res) => {
     }
 };
 
-// User logout
-const logout = (req, res) => {
-    res.clearCookie('token');
-    res.status(200).json({ message: 'Logged out successfully' });
-};
-
 // User login
 const login = async (req, res) => {
     try {
@@ -69,7 +63,7 @@ const login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid password' });
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '30s' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         console.log('Token created:', token); // Debug log
 
         res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 * 24 });
@@ -150,7 +144,6 @@ const protectedRoute = (req, res) => {
 module.exports = {
     register,
     login,
-    logout,
     getUserProfile,
     protectedRoute,
     showMe
