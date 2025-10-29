@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Page404 from "./pages/Page404";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import AuthRequiringRoutes from "./components/Authrequired";
 import { ACCESS_TOKEN } from "./constants";
 import { useContext } from "react";
@@ -91,6 +93,22 @@ function App() {
             }
           />
           <Route path="/logout" element={<Logout />} />
+          <Route
+            path="/cart"
+            element={
+              <AuthRequiringRoutes>
+                <Cart />
+              </AuthRequiringRoutes>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <AuthRequiringRoutes>
+                <Checkout />
+              </AuthRequiringRoutes>
+            }
+          />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </BrowserRouter>

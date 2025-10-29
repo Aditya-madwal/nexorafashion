@@ -1,20 +1,18 @@
 import { Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import api from "../api.jsx";
 import { ACCESS_TOKEN } from "../constants";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // routes that require the visitor to have bearer token to access :
 
 const AuthRequiringRoutes = ({ children }) => {
   const [IsAuth, SetIsAuth] = useState(null);
-  const navigate = useNavigate();
+
   useEffect(() => {
     checkAuth().catch(() => {
       SetIsAuth(false);
     });
-  });
+  }, []);
 
   // const refreshToken = async () => {
   //   const reftoken = localStorage.getItem(ACCESS_TOKEN);
@@ -38,18 +36,22 @@ const AuthRequiringRoutes = ({ children }) => {
     if (token === null) {
       SetIsAuth(false);
     } else {
-      const decodedToken = jwtDecode(token);
-      const expdate = decodedToken.exp;
-      const today = Date.now() / 1000;
+      try {
+        const decodedToken = jwtDecode(token);
+        const expdate = decodedToken.exp;
+        const today = Date.now() / 1000;
 
-      if (today > expdate) {
-        // token has expired
+        if (today > expdate) {
+          // token has expired
+          localStorage.removeItem(ACCESS_TOKEN);
+          SetIsAuth(false);
+        } else {
+          SetIsAuth(true);
+        }
+      } catch (error) {
+        // Invalid token
         localStorage.removeItem(ACCESS_TOKEN);
         SetIsAuth(false);
-        navigate("/login");
-      } else {
-        SetIsAuth(true);
-        navigate("/");
       }
     }
   };
