@@ -1,12 +1,9 @@
 const Cart = require('../models/cart');
 const Product = require('../models/product');
 
-// Process checkout and return mock receipt
 const checkout = async (req, res) => {
     try {
         const userId = req.userId;
-
-        // Get all cart items for the user
         const cartItems = await Cart.find({ userId })
             .populate('productId', 'name price');
 
@@ -14,7 +11,6 @@ const checkout = async (req, res) => {
             return res.status(400).json({ message: 'Cart is empty' });
         }
 
-        // Calculate total
         let total = 0;
         const items = cartItems.map(item => {
             const product = item.productId;
@@ -29,7 +25,6 @@ const checkout = async (req, res) => {
             };
         });
 
-        // Create mock receipt
         const receipt = {
             receiptId: `RCP-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
             timestamp: new Date().toISOString(),
@@ -38,9 +33,6 @@ const checkout = async (req, res) => {
             paymentMethod: 'Mock Payment',
             status: 'Completed'
         };
-
-        // Clear the cart after checkout (optional - you may want to keep it for history)
-        // await Cart.deleteMany({ userId });
 
         res.status(200).json({
             message: 'Checkout successful',

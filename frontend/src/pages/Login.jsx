@@ -23,7 +23,6 @@ const Login = () => {
         password,
       });
 
-      // Save token and user data to localStorage
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       setMe(response.data.user);
@@ -44,15 +43,8 @@ const Login = () => {
 
   return (
     <div className="h-screen flex overflow-hidden">
-      {/* Left Half - Login Form */}
       <div className="w-1/2 bg-white overflow-y-auto p-8 md:p-12">
         <div className="flex flex-col justify-between min-h-full">
-          {/* Header with Logo and Language Selector */}
-          {/* <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">NexoraFashion</h2>
-        </div> */}
-
-          {/* Main Content - Centered */}
           <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full py-8">
             <div className="mb-8">
               <h1 className="text-4xl font-bold mb-4 text-gray-900">
@@ -121,14 +113,12 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Footer - Copyright */}
           <div className="text-xs text-gray-400 mt-4">
             All rights reserved Betterise Technologies 2020
           </div>
         </div>
       </div>
 
-      {/* Right Half - Image */}
       <div className="w-1/2 hidden md:block h-screen overflow-hidden">
         <img
           src={loginImage}

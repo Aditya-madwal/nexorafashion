@@ -4,7 +4,6 @@ const { generateToken } = require('../utils/jwtutils');
 const authenticateToken = require('../utils/authMiddleware');
 const jwt = require('jsonwebtoken');
 
-// User registration
 const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -51,7 +50,6 @@ const register = async (req, res) => {
     }
 };
 
-// User login
 const login = async (req, res) => {
     try {
         let user = await User.findOne({ username: req.body.username });
@@ -64,12 +62,12 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-        console.log('Token created:', token); // Debug log
+        console.log('Token created:', token);
 
         res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 * 24 });
         res.json({
             message: 'Login successful',
-            token: token,  // Send token in response for debugging
+            token: token,
             user: user
         });
     } catch (error) {
@@ -78,20 +76,16 @@ const login = async (req, res) => {
     }
 };
 
-// Get current user's data
 const showMe = async (req, res) => {
     try {
-        // Get user ID from the authenticated request
         const userId = req.userId;
 
-        // Find the user by ID
         const user = await User.findById(userId);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Return user data without sensitive information
         const userData = {
             id: user._id,
             username: user.username,
@@ -109,7 +103,6 @@ const showMe = async (req, res) => {
 };
 
 
-// Get user profile
 const getUserProfile = async (req, res) => {
     try {
         const username = req.params.username;
@@ -135,9 +128,8 @@ const getUserProfile = async (req, res) => {
     }
 };
 
-// Protected route example
 const protectedRoute = (req, res) => {
-    console.log(req.userId); // This will be the user's ID from the token
+    console.log(req.userId);
     res.status(200).json({ message: 'Access granted to protected route' });
 };
 

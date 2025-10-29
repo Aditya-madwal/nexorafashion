@@ -34,10 +34,8 @@ const Register = () => {
 
   return (
     <div className="h-screen flex overflow-hidden">
-      {/* Left Half - Register Form */}
       <div className="w-1/2 bg-white overflow-y-auto p-8 md:p-12">
         <div className="flex flex-col justify-between min-h-full">
-          {/* Main Content - Centered */}
           <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full py-8">
             <div className="mb-8">
               <h1 className="text-4xl font-bold mb-4 text-gray-900">
@@ -106,7 +104,6 @@ const Register = () => {
               </button>
             </form>
 
-            {/* Contact Information */}
             <div className="mt-12">
               <p className="text-sm text-gray-700 font-medium mb-2">
                 Contact us if you have any questions
@@ -119,14 +116,12 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Footer - Copyright */}
           <div className="text-xs text-gray-400 mt-4">
             All rights reserved Betterise Technologies 2020
           </div>
         </div>
       </div>
 
-      {/* Right Half - Image */}
       <div className="w-1/2 hidden md:block h-screen overflow-hidden">
         <img
           src={loginImage}

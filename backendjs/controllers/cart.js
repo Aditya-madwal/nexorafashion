@@ -1,7 +1,6 @@
 const Cart = require('../models/cart');
 const Product = require('../models/product');
 
-// Add item to cart
 const addToCart = async (req, res) => {
     try {
         const userId = req.userId;
@@ -15,20 +14,17 @@ const addToCart = async (req, res) => {
             return res.status(400).json({ message: 'Quantity must be greater than 0' });
         }
 
-        // Check if product exists
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Check if item already exists in cart for this user
         const existingCartItem = await Cart.findOne({
             userId,
             productId
         });
 
         if (existingCartItem) {
-            // Update quantity
             existingCartItem.quantity += qty;
             await existingCartItem.save();
             return res.status(200).json({
@@ -37,7 +33,6 @@ const addToCart = async (req, res) => {
             });
         }
 
-        // Create new cart item
         const cartItem = new Cart({
             userId,
             productId,
@@ -57,16 +52,12 @@ const addToCart = async (req, res) => {
     }
 };
 
-// Get all cart items with total
 const getCart = async (req, res) => {
     try {
         const userId = req.userId;
-
-        // Get all cart items for the user
         const cartItems = await Cart.find({ userId })
-            .populate('productId', 'name price description stock');
+            .populate('productId', 'name price description stock image');
 
-        // Calculate total
         let total = 0;
         const items = cartItems.map(item => {
             const product = item.productId;
@@ -80,7 +71,8 @@ const getCart = async (req, res) => {
                     name: product.name,
                     price: product.price,
                     description: product.description,
-                    stock: product.stock
+                    stock: product.stock,
+                    image: product.image
                 },
                 quantity: item.quantity,
                 subtotal: itemTotal,
@@ -100,13 +92,11 @@ const getCart = async (req, res) => {
     }
 };
 
-// Remove item from cart
 const removeFromCart = async (req, res) => {
     try {
         const userId = req.userId;
         const cartItemId = req.params.id;
 
-        // Find and verify the cart item belongs to the user
         const cartItem = await Cart.findOne({
             _id: cartItemId,
             userId

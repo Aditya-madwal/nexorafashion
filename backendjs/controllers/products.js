@@ -1,11 +1,9 @@
 const Product = require('../models/product');
 
-// Create a new product
 const createProduct = async (req, res) => {
     try {
         const { name, description, price, stock, image } = req.body;
 
-        // Validation
         if (!name || price === undefined) {
             return res.status(400).json({ message: 'Name and price are required' });
         }
@@ -18,7 +16,6 @@ const createProduct = async (req, res) => {
             return res.status(400).json({ message: 'Stock must be greater than or equal to 0' });
         }
 
-        // Create new product
         const product = new Product({
             name,
             description: description || '',
@@ -39,17 +36,14 @@ const createProduct = async (req, res) => {
     }
 };
 
-// Get products with pagination
+
 const getProducts = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        // Get total count for pagination metadata
         const total = await Product.countDocuments();
-
-        // Get products with pagination
         const products = await Product.find()
             .skip(skip)
             .limit(limit)
